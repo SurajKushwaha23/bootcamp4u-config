@@ -1,0 +1,33 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:5173" # Default Vite + React dev port
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+      routes:
+        - id: auth-service-route
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/api/auth/**
+
+        - id: catalog-service-route
+          uri: lb://CATALOG-SERVICE
+          predicates:
+            - Path=/api/catalog/**
+
+        - id: enrollment-service-route
+          uri: lb://ENROLLMENT-SERVICE
+          predicates:
+            - Path=/api/enrollments/**
